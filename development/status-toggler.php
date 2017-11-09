@@ -48,6 +48,9 @@ if ( ! defined( 'STATUS_TOGGLER_PATH' ) ) {
 	define( 'STATUS_TOGGLER_PATH', plugin_dir_path( __FILE__ ) );
 }
 
+if ( ! defined( 'STATUS_TOGGLER_URL' ) ) {
+	define( 'STATUS_TOGGLER_URL', plugin_dir_url( __FILE__ ) );
+}
 
 
 /**
@@ -63,7 +66,8 @@ if ( ! function_exists( 'status_toggler_activate' ) ) {
 		 * Include activation class and execute.
 		 */
 		require_once( plugin_dir_path( __FILE__ ) . 'inc/class-status-toggler-activator.php' );
-		Status_Toggler_Activator::now();
+		$activate = new Status_Toggler_Activator();
+		$activate->now();
 	}
 
 	/* Hook to WordPress */
@@ -83,7 +87,7 @@ if ( ! function_exists( 'status_toggler_deactivate' ) ) {
 	}
 
 	/* Hook to WordPress */
-	register_deactivation_hook( __FILE__, 'status_toggler_deactivate' );
+	// register_deactivation_hook( __FILE__, 'status_toggler_deactivate' );
 }
 
 if ( ! function_exists( 'status_toggler_run' ) ) {
@@ -91,14 +95,11 @@ if ( ! function_exists( 'status_toggler_run' ) ) {
 	 * Function to create the plugin instance.
 	 */
 	function status_toggler_run() {
+		require_once( STATUS_TOGGLER_PATH . 'inc/class-status-toggler.php' );
 		$plugin = new Status_Toggler();
 		$plugin->run();
+
 	}
 
 	status_toggler_run();
-} else {
-	exit;
 }
-
-
-

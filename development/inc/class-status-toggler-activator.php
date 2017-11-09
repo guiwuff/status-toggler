@@ -51,15 +51,13 @@ class Status_Toggler_Activator {
 	 * Check user credentials before proceed with the activation process
 	 * in the static method now()
 	 */
-	public static function now() {
+	public function now() {
 		// Check user credentials.
 		if ( ! current_user_can( 'activate_plugins' ) ) {
 			return;
 		}
 
-		// Proceed if not return.
-		$plugin = isset( $_REQUEST['plugin'] ) ? trim( $_REQUEST['plugin'] ) : '';
-		check_admin_referer( "activate-plugin_{$plugin}" );
+		flush_rewrite_rules();
 
 		// Additional admin notice after activation via transient.
 		set_transient( "{$this->plugin_name}-transient", true, 10 );

@@ -45,6 +45,8 @@ The installation of the plugin can be done through theese methods:
 
 ## Screenshots
 
+![Edit status post type](status-toggler-shots-single-status-edit-v-1-0-0.png)
+
 ## Using Status Toggler Plugin
 
 ## Support Links

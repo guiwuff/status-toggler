@@ -43,6 +43,15 @@ class Status_Toggler {
 	protected $loader;
 
 	/**
+	 * Protected array for plugin identity.
+	 *
+	 * @since  1.0.0
+	 * @var    array       $plugins        The identity array of the plugin.
+	 * @access protected
+	 */
+	protected $plugins;
+
+	/**
 	 * Protected var for plugin version.
 	 *
 	 * @since  1.0.0
@@ -85,6 +94,13 @@ class Status_Toggler {
 		$this->plugin_path = STATUS_TOGGLER_PATH;
 		$this->version     = STATUS_TOGGLER_VERSION;
 
+		$this->plugins = array(
+			'version' => STATUS_TOGGLER_VERSION,
+			'name'    => STATUS_TOGGLER_NAME,
+			'path'    => STATUS_TOGGLER_PATH,
+			'url'     => STATUS_TOGGLER_URL,
+		);
+
 		$this->load_dependencies();
 		$this->set_locale();
 		$this->define_admin_hooks();
@@ -101,24 +117,31 @@ class Status_Toggler {
 	 * @since   1.0.0
 	 */
 	private function load_dependencies() {
+		$plugins = $this->plugins;
 		/**
 		 * Require Loader class.
 		 */
-		require_once "{$this->plugin_path}/inc/class-status-toggler-loader.php";
+		require_once "{$plugins['path']}inc/class-status-toggler-loader.php";
 		/**
 		 * Require Internationalization class.
 		 */
-		require_once "{$this->plugin_path}/inc/class-status-toggler-i18n.php";
+		require_once "{$plugins['path']}inc/class-status-toggler-i18n.php";
 		/**
 		 * Require Admin class.
 		 */
-		require_once "{$this->plugin_path}/admin/class-status-toggler-admin.php";
+		require_once "{$plugins['path']}admin/class-status-toggler-admin.php";
+		/**
+		 * Require Admin Acf class.
+		 */
+		require_once "{$plugins['path']}admin/class-status-toggler-admin-acf.php";
+
 		/**
 		 * Require Public class.
 		 */
-		require_once "{$this->plugin_path}/public/class-status-toggler-public.php";
+		require_once "{$plugins['path']}public/class-status-toggler-public.php";
 
-		$this->loader = new Status_Toggler_loader();
+		$this->loader  = new Status_Toggler_loader();
+
 	}
 
 	/**
@@ -132,8 +155,7 @@ class Status_Toggler {
 	 */
 	private function set_locale() {
 
-		$plugin_i18n = new Site_Function_I18n();
-
+		$plugin_i18n = new Status_Toggler_I18n();
 		$this->loader->add_action( 'plugins_loaded', $plugin_i18n, 'load_plugin_textdomain' );
 
 	}
@@ -146,13 +168,21 @@ class Status_Toggler {
 	 * @access   private
 	 */
 	private function define_admin_hooks() {
+		$plugins = $this->plugins;
+		$loader  = $this->loader;
 
-		$plugin_admin = new Status_Toggler_Admin( $this->plugin_name, $this->version, $this->plugin_path );
+		$plugin_admin   = new Status_Toggler_Admin( $plugins );
+		$plugin_acf     = new Status_Toggler_Admin_Acf( $plugins, $loader );
 
-		// Admin notice after activation.
-		if ( get_transient( "{$this->plugin_name}-transient" ) ) {
-			$this->loader->add_action( 'admin_notices', $plugin_admin, 'display_activation_notice' );
+
+		/* Admin notice after activation. */
+		if ( get_transient( "{$plugins['name']}-transient" ) ) {
+			$loader->add_action( 'admin_notices', $plugin_admin, 'display_activation_notice' );
 		}
+
+		$loader->add_action( 'init', $plugin_admin, 'register_status_post_type' );
+
+
 		//$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_styles' );
 		//$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts' );
 
@@ -167,7 +197,8 @@ class Status_Toggler {
 	 */
 	private function define_public_hooks() {
 
-		$plugin_public = new Status_Toggler_Public( $this->plugin_name, $this->version, $this->plugin_path );
+		$plugins = $this->plugins;
+		$plugin_public = new Status_Toggler_Public( $plugins );
 
 		//$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_styles' );
 		//$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_scripts' );

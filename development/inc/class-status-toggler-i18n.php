@@ -2,7 +2,7 @@
 /**
  * File doc comment
  */
-if ( ! class_exists( 'Status_Toggler_I18n' ) ) {
+if ( class_exists( 'Status_Toggler_I18n' ) ) {
 	return;
 }
 

@@ -1,0 +1,100 @@
+<?php
+if(function_exists("register_field_group"))
+{
+	register_field_group(array (
+		'id' => 'acf_status',
+		'title' => 'Status',
+		'fields' => array (
+			array (
+				'key' => 'field_5a03729defb50',
+				'label' => 'Description',
+				'name' => 'status_description',
+				'type' => 'textarea',
+				'instructions' => 'Description of the status or additional informations you wuould like to display.',
+				'default_value' => '',
+				'placeholder' => '',
+				'maxlength' => '',
+				'rows' => 4,
+				'formatting' => 'html',
+			),
+			array (
+				'key' => 'field_5a0372faefb51',
+				'label' => 'Icon Off',
+				'name' => 'icon_off',
+				'type' => 'image',
+				'instructions' => 'Icon represent the status when it is off.',
+				'required' => 1,
+				'save_format' => 'url',
+				'preview_size' => 'full',
+				'library' => 'all',
+			),
+			array (
+				'key' => 'field_5a037362efb52',
+				'label' => 'Icon On',
+				'name' => 'icon_on',
+				'type' => 'image',
+				'instructions' => 'Icon represent the status when it is on.',
+				'required' => 1,
+				'save_format' => 'url',
+				'preview_size' => 'full',
+				'library' => 'all',
+			),
+			array (
+				'key' => 'field_5a037389efb53',
+				'label' => 'Current Status',
+				'name' => 'current_status',
+				'type' => 'radio',
+				'required' => 1,
+				'choices' => array (
+					'On' => 'On',
+					'Off' => 'Off',
+				),
+				'other_choice' => 0,
+				'save_other_choice' => 0,
+				'default_value' => '',
+				'layout' => 'horizontal',
+			),
+		),
+		'location' => array (
+			array (
+				array (
+					'param' => 'post_type',
+					'operator' => '==',
+					'value' => 'status',
+					'order_no' => 0,
+					'group_no' => 0,
+				),
+			),
+			array (
+				array (
+					'param' => 'ef_user',
+					'operator' => '==',
+					'value' => 'administrator',
+					'order_no' => 0,
+					'group_no' => 1,
+				),
+			),
+		),
+		'options' => array (
+			'position' => 'acf_after_title',
+			'layout' => 'no_box',
+			'hide_on_screen' => array (
+				0 => 'permalink',
+				1 => 'the_content',
+				2 => 'excerpt',
+				3 => 'custom_fields',
+				4 => 'discussion',
+				5 => 'comments',
+				6 => 'revisions',
+				7 => 'slug',
+				8 => 'author',
+				9 => 'format',
+				10 => 'featured_image',
+				11 => 'categories',
+				12 => 'tags',
+				13 => 'send-trackbacks',
+			),
+		),
+		'menu_order' => 0,
+	));
+}
